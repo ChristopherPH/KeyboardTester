@@ -8,7 +8,7 @@ namespace KeyboardTester
         {
             InitializeComponent();
 
-            InitRawInput();
+            InitKeyboardHandler();
         }
 
         private void HandleKeyPress(Keys keyData, bool keyDown)

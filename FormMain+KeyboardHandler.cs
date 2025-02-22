@@ -14,7 +14,7 @@ namespace KeyboardTester
         public RawInput rawInput;
         public RawInputKeyStates rawShiftKey;
 
-        private void InitRawInput()
+        private void InitKeyboardHandler()
         {
             rawShiftKey = Control.ModifierKeys.HasFlag(Keys.Shift) ?
                 RawInputKeyStates.Down : RawInputKeyStates.Up;
