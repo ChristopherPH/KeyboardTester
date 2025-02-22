@@ -16,18 +16,23 @@ namespace KeyboardTester
 
         private void InitKeyboardHandler()
         {
+            //Save state of shift key before capturing raw keyboard events
             rawShiftKey = Control.ModifierKeys.HasFlag(Keys.Shift) ?
                 RawInputKeyStates.Down : RawInputKeyStates.Up;
 
+            //Setup raw input capture, used to handle shift numberpad
+            //keys when numlock is on
             rawInput = new RawInput(this);
             rawInput.RawInputKeyboard += rawInput_RawInputKeyboard;
 
+            //Setup keyboard event capture
             Application.AddMessageFilter(this);
             this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
         }
 
         private void rawInput_RawInputKeyboard(object sender, RawInputKeyboardEventArgs e)
         {
+            //Maintain raw shift state
             if (e.Key == Keys.ShiftKey)
                 rawShiftKey = e.KeyState;
         }
@@ -36,6 +41,7 @@ namespace KeyboardTester
         {
             base.WndProc(ref m);
 
+            //Handle raw input events
             rawInput?.HandleWndProc(m);
         }
 
