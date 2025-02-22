@@ -3,7 +3,7 @@ using TheBlackRoom.WinForms.Keyboard;
 
 namespace KeyboardTester
 {
-    public partial class FormMain
+    public partial class FormMain : IMessageFilter
     {
         const int WM_KEYDOWN = 0x100;
         const int WM_KEYUP = 0x101;
@@ -21,6 +21,9 @@ namespace KeyboardTester
 
             rawInput = new RawInput(this);
             rawInput.RawInputKeyboard += rawInput_RawInputKeyboard;
+
+            Application.AddMessageFilter(this);
+            this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
         }
 
         private void rawInput_RawInputKeyboard(object sender, RawInputKeyboardEventArgs e)
@@ -36,39 +39,14 @@ namespace KeyboardTester
             rawInput?.HandleWndProc(m);
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            //in order to get as much control over keys, ProcessCmdKey()
-            //becomes the KEYDOWN handler.
-            if (numpadKeysDown > 0)
-            {
-                if ((keyData & Keys.KeyCode) == Keys.ShiftKey)
-                {
-                    numpadKeysDown--;
-                    return true;
-                }
-
-                keyData = FixNumberPadKeys(msg, keyData);
-            }
-
-            HandleKeyPress(keyData, true);
-
-            //returning true eats ProcessKeyPreview, OnKeyDown
-            return true;
-        }
-
-        /*
-         * ProcessKeyPreview() only gets called when there is
-         * a control on the form
-         */
-        protected override bool ProcessKeyPreview(ref Message msg)
+        /* Use IMessageFilter.PreFilterMessage to capture keyboard events,
+         * to avoid complications with ProcessCmdKey() and ProcessKeyPreview() */
+        bool IMessageFilter.PreFilterMessage(ref Message msg)
         {
             Keys keyData;
 
             switch (msg.Msg)
             {
-                //KeyDown events don't trigger, as ProcessCmdKey()
-                //returns true
                 case WM_KEYDOWN:
                 case WM_SYSKEYDOWN:
                     keyData = (Keys)msg.WParam | ModifierKeys;
@@ -109,7 +87,7 @@ namespace KeyboardTester
                     break;
             }
 
-            return base.ProcessKeyPreview(ref msg);
+            return false;
         }
 
         private Keys FixNumberPadKeys(Message msg, Keys keyData)
