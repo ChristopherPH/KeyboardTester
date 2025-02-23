@@ -102,21 +102,27 @@ namespace KeyboardTester
 
             if (((keyData & Keys.Modifiers) == 0) && (!extended))
             {
+                //TODO: Determine how we want the numeric keypad to work.
+                //Note: If we want to ignore the numlock key, we also end up ignoring the shift key.
+                bool keypadNumbersIgnoreNumlockAndShift = false;
+
+                Keys modKey = keypadNumbersIgnoreNumlockAndShift ? Keys.None : Keys.Shift;
+
                 switch (keyData)
                 {
-                    case Keys.Insert: keyData = (Keys.NumPad0 | Keys.Shift); break;
+                    case Keys.Insert: keyData = (Keys.NumPad0 | modKey); break;
 
-                    case Keys.End: keyData = (Keys.NumPad1 | Keys.Shift); break;
-                    case Keys.Down: keyData = (Keys.NumPad2 | Keys.Shift); break;
-                    case Keys.PageDown: keyData = (Keys.NumPad3 | Keys.Shift); break;
+                    case Keys.End: keyData = (Keys.NumPad1 | modKey); break;
+                    case Keys.Down: keyData = (Keys.NumPad2 | modKey); break;
+                    case Keys.PageDown: keyData = (Keys.NumPad3 | modKey); break;
 
-                    case Keys.Left: keyData = (Keys.NumPad4 | Keys.Shift); break;
-                    case Keys.Clear: keyData = (Keys.NumPad5 | Keys.Shift); break;
-                    case Keys.Right: keyData = (Keys.NumPad6 | Keys.Shift); break;
+                    case Keys.Left: keyData = (Keys.NumPad4 | modKey); break;
+                    case Keys.Clear: keyData = (Keys.NumPad5 | modKey); break;
+                    case Keys.Right: keyData = (Keys.NumPad6 | modKey); break;
 
-                    case Keys.Home: keyData = (Keys.NumPad7 | Keys.Shift); break;
-                    case Keys.Up: keyData = (Keys.NumPad8 | Keys.Shift); break;
-                    case Keys.PageUp: keyData = (Keys.NumPad9 | Keys.Shift); break;
+                    case Keys.Home: keyData = (Keys.NumPad7 | modKey); break;
+                    case Keys.Up: keyData = (Keys.NumPad8 | modKey); break;
+                    case Keys.PageUp: keyData = (Keys.NumPad9 | modKey); break;
                 }
             }
 

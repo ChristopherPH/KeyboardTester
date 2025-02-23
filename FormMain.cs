@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace KeyboardTester
@@ -12,6 +13,15 @@ namespace KeyboardTester
             InitKeyboardHandler();
 
             lblNumLock.Text = $"NumLock: {(Control.IsKeyLocked(Keys.NumLock) ? "ON" : "OFF")}";
+
+            lblInstructions.Text = @"Notes:
+
+When NumLock is off, pressing a key on the numeric keypad will trigger a home/end/pgup/pgdown/arrow key.
+
+When NumLock is on, pressing a key on the numeric keypad will trigger a number key.
+
+When NumLock is on, and a single shift key is held down, pressing a key on the numeric keypad will remove the shift, trigger a home/end/pgup/pgdown/arrow key, then add back the shift.
+";
         }
 
         public Dictionary<Keys, ListViewItem> PressedKeys = new Dictionary<Keys, ListViewItem>();
@@ -30,6 +40,8 @@ namespace KeyboardTester
             //Split keycode from modifiers
             var keyCode = keyData & Keys.KeyCode;
             var modifiers = keyData & Keys.Modifiers;
+
+            txtLog.AppendText($"{(keyDown ? "Pressed" : "Released")} {keyCode} [{modifiers}]" + Environment.NewLine);
 
             //Strip own modifier from modifier keys
             switch (keyCode)
