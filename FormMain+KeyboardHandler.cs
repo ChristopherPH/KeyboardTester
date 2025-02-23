@@ -99,9 +99,9 @@ namespace KeyboardTester
                         return true;
                     }
 
-                    //Fix up number pad keys if within a fake shift block
+                    //Adjust number pad keys if within a fake shift block
                     if (keysInFakeShift > 0)
-                        keyData = ShiftNumberPadKeys(msg, keyData,
+                        keyData = AdjustNumberPadKeyData(msg, keyData,
                             NumlockModes == NumPadNumlockModes.IgnoreShift);
 
                     return HandleKeyPress(keyData, true);
@@ -117,9 +117,9 @@ namespace KeyboardTester
                         return true;
                     }
 
-                    //Fix up number pad keys if within a fake shift block
+                    //Adjust number pad keys if within a fake shift block
                     if (keysInFakeShift > 0)
-                        keyData = ShiftNumberPadKeys(msg, keyData,
+                        keyData = AdjustNumberPadKeyData(msg, keyData,
                             NumlockModes == NumPadNumlockModes.IgnoreShift);
 
                     return HandleKeyPress(keyData, false);
@@ -128,15 +128,16 @@ namespace KeyboardTester
             return false;
         }
 
-        private Keys ShiftNumberPadKeys(Message msg, Keys keyData, bool IgnoreNumlockAndShift)
+        private Keys AdjustNumberPadKeyData(Message msg, Keys keyData, bool SkipShift = false)
         {
-            var extended = ((msg.LParam.ToInt32() >> 24) & 1) != 0;
-
             //Split keycode from modifiers
             var keyCode = keyData & Keys.KeyCode;
             var modifiers = keyData & Keys.Modifiers;
 
-            //If an unshifted numberpad key, then change the key
+            //Get extended flag from message
+            var extended = ((msg.LParam.ToInt32() >> 24) & 1) != 0;
+
+            //If the key is an unshifted numberpad key, then update the key
             if (!extended && !modifiers.HasFlag(Keys.Shift))
             {
                 switch (keyCode)
@@ -156,9 +157,11 @@ namespace KeyboardTester
                     case Keys.PageUp: keyCode = Keys.NumPad9; break;
                 }
 
-                if (!IgnoreNumlockAndShift)
+                //Add shift modifier to the key
+                if (!SkipShift)
                     modifiers |= Keys.Shift;
 
+                //Rebuild key press
                 keyData = keyCode | modifiers;
             }
 

@@ -6,9 +6,9 @@ Goals:
 - Capture key down and key up events before they are processed by Windows
 - Handle the numeric keypad unshifting functionality when numlock is on
 
-## Issues
+## Known Issues
 
-- Numlock on, default handling
+- Numlock on, using `Default Handling`
   - ERROR: Released NumPad4 without associated press (this is expected with default handling)
     - Hold shift
     - Hold ctrl
