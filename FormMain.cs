@@ -70,27 +70,31 @@ Holding both shift keys and pressing a key on the numeric keypad will:
             var modifiers = keyData & Keys.Modifiers;
 
             //Strip own modifier from modifier keys
+
+            var adjustedModifiers = modifiers;
+            var adjustedKeyData = keyData;
+
             switch (keyCode)
             {
                 case Keys.ShiftKey:
-                    modifiers &= ~Keys.Shift;
-                    keyData = keyCode | modifiers;
+                    adjustedModifiers &= ~Keys.Shift;
+                    adjustedKeyData = keyCode | adjustedModifiers;
                     break;
 
                 case Keys.ControlKey:
-                    modifiers &= ~Keys.Control;
-                    keyData = keyCode | modifiers;
+                    adjustedModifiers &= ~Keys.Control;
+                    adjustedKeyData = keyCode | adjustedModifiers;
                     break;
 
                 case Keys.Menu:
-                    modifiers &= ~Keys.Alt;
-                    keyData = keyCode | modifiers;
+                    adjustedModifiers &= ~Keys.Alt;
+                    adjustedKeyData = keyCode | adjustedModifiers;
                     break;
             }
 
             //Log keypress
-            if (modifiers != Keys.None)
-                txtLog.AppendText($"{(keyDown ? "Pressed" : "Released")} {keyCode} [{modifiers}]" + Environment.NewLine);
+            if (adjustedModifiers != Keys.None)
+                txtLog.AppendText($"{(keyDown ? "Pressed" : "Released")} {keyCode} [{adjustedModifiers}]" + Environment.NewLine);
             else
                 txtLog.AppendText($"{(keyDown ? "Pressed" : "Released")} {keyCode}" + Environment.NewLine);
 
