@@ -14,6 +14,23 @@ namespace KeyboardTester
         public RawInput rawInput;
         public RawInputKeyStates rawShiftKey;
 
+        enum NumPadNumlockModes
+        {
+            Default,
+            ShiftShifted,
+            IgnoreShift,
+        }
+
+        NumPadNumlockModes NumlockModes
+        {
+            get => _numlockModes;
+            set
+            {
+                _numlockModes = value;
+            }
+        }
+        NumPadNumlockModes _numlockModes = NumPadNumlockModes.Default;
+
         private void InitKeyboardHandler()
         {
             //Save state of shift key before capturing raw keyboard events
@@ -57,7 +74,7 @@ namespace KeyboardTester
                 case WM_SYSKEYDOWN:
                     keyData = (Keys)msg.WParam | ModifierKeys;
 
-                    if (numpadKeysDown > 0)
+                    if ((NumlockModes != NumPadNumlockModes.Default) && (numpadKeysDown > 0))
                     {
                         if ((keyData & Keys.KeyCode) == Keys.ShiftKey)
                         {
@@ -65,48 +82,47 @@ namespace KeyboardTester
                             return true;
                         }
 
-                        keyData = FixNumberPadKeys(msg, keyData);
+                        keyData = FixNumberPadKeys(msg, keyData,
+                            NumlockModes == NumPadNumlockModes.IgnoreShift);
                     }
 
-                    HandleKeyPress(keyData, true);
-                    break;
+                    return HandleKeyPress(keyData, true);
 
                 case WM_KEYUP:
                 case WM_SYSKEYUP:
                     keyData = (Keys)msg.WParam | ModifierKeys;
 
-                    if ((keyData & Keys.KeyCode) == Keys.ShiftKey)
+                    if (NumlockModes != NumPadNumlockModes.Default)
                     {
-                        var numlock = Control.IsKeyLocked(Keys.NumLock);
-
-                        if (numlock && (rawShiftKey == RawInputKeyStates.Down))
+                        if ((keyData & Keys.KeyCode) == Keys.ShiftKey)
                         {
-                            numpadKeysDown++;
-                            return true;
+                            var numlock = Control.IsKeyLocked(Keys.NumLock);
+
+                            if (numlock && (rawShiftKey == RawInputKeyStates.Down))
+                            {
+                                numpadKeysDown++;
+                                return true;
+                            }
                         }
+
+                        if (numpadKeysDown > 0)
+                            keyData = FixNumberPadKeys(msg, keyData,
+                                NumlockModes == NumPadNumlockModes.IgnoreShift);
                     }
 
-                    if (numpadKeysDown > 0)
-                        keyData = FixNumberPadKeys(msg, keyData);
-
-                    HandleKeyPress(keyData, false);
-                    break;
+                    return HandleKeyPress(keyData, false);
             }
 
             return false;
         }
 
-        private Keys FixNumberPadKeys(Message msg, Keys keyData)
+        private Keys FixNumberPadKeys(Message msg, Keys keyData, bool IgnoreNumlockAndShift)
         {
             var extended = ((msg.LParam.ToInt32() >> 24) & 1) != 0;
 
             if (((keyData & Keys.Modifiers) == 0) && (!extended))
             {
-                //TODO: Determine how we want the numeric keypad to work.
-                //Note: If we want to ignore the numlock key, we also end up ignoring the shift key.
-                bool keypadNumbersIgnoreNumlockAndShift = false;
-
-                Keys modKey = keypadNumbersIgnoreNumlockAndShift ? Keys.None : Keys.Shift;
+                Keys modKey = IgnoreNumlockAndShift ? Keys.None : Keys.Shift;
 
                 switch (keyData)
                 {

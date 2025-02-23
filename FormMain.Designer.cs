@@ -30,16 +30,16 @@
         {
             this.lblInstructions = new System.Windows.Forms.Label();
             this.lvPressedKeys = new System.Windows.Forms.ListView();
-            this.gbNumLock = new System.Windows.Forms.GroupBox();
-            this.rbNumLockDefault = new System.Windows.Forms.RadioButton();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lblNumLock = new System.Windows.Forms.Label();
-            this.rbNumLockShifted = new System.Windows.Forms.RadioButton();
+            this.gbNumLock = new System.Windows.Forms.GroupBox();
             this.rbNumLockIgnore = new System.Windows.Forms.RadioButton();
+            this.rbNumLockShifted = new System.Windows.Forms.RadioButton();
+            this.rbNumLockDefault = new System.Windows.Forms.RadioButton();
+            this.lblNumLock = new System.Windows.Forms.Label();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.gbNumLock.SuspendLayout();
             this.SuspendLayout();
@@ -52,7 +52,7 @@
             this.lblInstructions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblInstructions.Location = new System.Drawing.Point(12, 9);
             this.lblInstructions.Name = "lblInstructions";
-            this.lblInstructions.Size = new System.Drawing.Size(518, 264);
+            this.lblInstructions.Size = new System.Drawing.Size(518, 293);
             this.lblInstructions.TabIndex = 0;
             this.lblInstructions.Text = "Instructions:";
             // 
@@ -68,38 +68,14 @@
             this.columnHeader5});
             this.lvPressedKeys.FullRowSelect = true;
             this.lvPressedKeys.GridLines = true;
-            this.lvPressedKeys.Location = new System.Drawing.Point(12, 279);
+            this.lvPressedKeys.HideSelection = false;
+            this.lvPressedKeys.Location = new System.Drawing.Point(12, 305);
             this.lvPressedKeys.MultiSelect = false;
             this.lvPressedKeys.Name = "lvPressedKeys";
-            this.lvPressedKeys.Size = new System.Drawing.Size(518, 196);
+            this.lvPressedKeys.Size = new System.Drawing.Size(518, 281);
             this.lvPressedKeys.TabIndex = 1;
             this.lvPressedKeys.UseCompatibleStateImageBehavior = false;
             this.lvPressedKeys.View = System.Windows.Forms.View.Details;
-            // 
-            // gbNumLock
-            // 
-            this.gbNumLock.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbNumLock.Controls.Add(this.rbNumLockIgnore);
-            this.gbNumLock.Controls.Add(this.rbNumLockShifted);
-            this.gbNumLock.Controls.Add(this.rbNumLockDefault);
-            this.gbNumLock.Location = new System.Drawing.Point(536, 9);
-            this.gbNumLock.Name = "gbNumLock";
-            this.gbNumLock.Size = new System.Drawing.Size(336, 217);
-            this.gbNumLock.TabIndex = 2;
-            this.gbNumLock.TabStop = false;
-            this.gbNumLock.Text = "Shift + Numpad + Numlock Handling";
-            // 
-            // rbNumLockDefault
-            // 
-            this.rbNumLockDefault.AutoSize = true;
-            this.rbNumLockDefault.Checked = true;
-            this.rbNumLockDefault.Location = new System.Drawing.Point(17, 40);
-            this.rbNumLockDefault.Name = "rbNumLockDefault";
-            this.rbNumLockDefault.Size = new System.Drawing.Size(218, 24);
-            this.rbNumLockDefault.TabIndex = 0;
-            this.rbNumLockDefault.Text = "Default (unshift, key, shift)";
-            this.rbNumLockDefault.UseVisualStyleBackColor = true;
             // 
             // columnHeader1
             // 
@@ -122,26 +98,19 @@
             this.columnHeader5.Text = "Repeat";
             this.columnHeader5.Width = 80;
             // 
-            // lblNumLock
+            // gbNumLock
             // 
-            this.lblNumLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblNumLock.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblNumLock.Location = new System.Drawing.Point(536, 229);
-            this.lblNumLock.Name = "lblNumLock";
-            this.lblNumLock.Size = new System.Drawing.Size(336, 44);
-            this.lblNumLock.TabIndex = 3;
-            this.lblNumLock.Text = "NumLock";
-            this.lblNumLock.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // rbNumLockShifted
-            // 
-            this.rbNumLockShifted.AutoSize = true;
-            this.rbNumLockShifted.Location = new System.Drawing.Point(17, 70);
-            this.rbNumLockShifted.Name = "rbNumLockShifted";
-            this.rbNumLockShifted.Size = new System.Drawing.Size(135, 24);
-            this.rbNumLockShifted.TabIndex = 4;
-            this.rbNumLockShifted.Text = "Shift + Shifted";
-            this.rbNumLockShifted.UseVisualStyleBackColor = true;
+            this.gbNumLock.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbNumLock.Controls.Add(this.rbNumLockIgnore);
+            this.gbNumLock.Controls.Add(this.rbNumLockShifted);
+            this.gbNumLock.Controls.Add(this.rbNumLockDefault);
+            this.gbNumLock.Location = new System.Drawing.Point(536, 9);
+            this.gbNumLock.Name = "gbNumLock";
+            this.gbNumLock.Size = new System.Drawing.Size(336, 246);
+            this.gbNumLock.TabIndex = 2;
+            this.gbNumLock.TabStop = false;
+            this.gbNumLock.Text = "Shift + Numpad + Numlock Handling";
             // 
             // rbNumLockIgnore
             // 
@@ -152,21 +121,59 @@
             this.rbNumLockIgnore.TabIndex = 5;
             this.rbNumLockIgnore.Text = "Ignore Shift";
             this.rbNumLockIgnore.UseVisualStyleBackColor = true;
+            this.rbNumLockIgnore.CheckedChanged += new System.EventHandler(this.rbNumLockIgnore_CheckedChanged);
+            // 
+            // rbNumLockShifted
+            // 
+            this.rbNumLockShifted.AutoSize = true;
+            this.rbNumLockShifted.Location = new System.Drawing.Point(17, 70);
+            this.rbNumLockShifted.Name = "rbNumLockShifted";
+            this.rbNumLockShifted.Size = new System.Drawing.Size(135, 24);
+            this.rbNumLockShifted.TabIndex = 4;
+            this.rbNumLockShifted.Text = "Shift + Shifted";
+            this.rbNumLockShifted.UseVisualStyleBackColor = true;
+            this.rbNumLockShifted.CheckedChanged += new System.EventHandler(this.rbNumLockShifted_CheckedChanged);
+            // 
+            // rbNumLockDefault
+            // 
+            this.rbNumLockDefault.AutoSize = true;
+            this.rbNumLockDefault.Checked = true;
+            this.rbNumLockDefault.Location = new System.Drawing.Point(17, 40);
+            this.rbNumLockDefault.Name = "rbNumLockDefault";
+            this.rbNumLockDefault.Size = new System.Drawing.Size(218, 24);
+            this.rbNumLockDefault.TabIndex = 0;
+            this.rbNumLockDefault.TabStop = true;
+            this.rbNumLockDefault.Text = "Default (unshift, key, shift)";
+            this.rbNumLockDefault.UseVisualStyleBackColor = true;
+            this.rbNumLockDefault.CheckedChanged += new System.EventHandler(this.rbNumLockDefault_CheckedChanged);
+            // 
+            // lblNumLock
+            // 
+            this.lblNumLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblNumLock.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblNumLock.Location = new System.Drawing.Point(536, 258);
+            this.lblNumLock.Name = "lblNumLock";
+            this.lblNumLock.Size = new System.Drawing.Size(336, 44);
+            this.lblNumLock.TabIndex = 3;
+            this.lblNumLock.Text = "NumLock";
+            this.lblNumLock.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtLog
             // 
             this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLog.Location = new System.Drawing.Point(536, 279);
+            this.txtLog.Location = new System.Drawing.Point(536, 305);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
-            this.txtLog.Size = new System.Drawing.Size(336, 196);
+            this.txtLog.ReadOnly = true;
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtLog.Size = new System.Drawing.Size(336, 281);
             this.txtLog.TabIndex = 3;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 487);
+            this.ClientSize = new System.Drawing.Size(884, 598);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.gbNumLock);
             this.Controls.Add(this.lblNumLock);

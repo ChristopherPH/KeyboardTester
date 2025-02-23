@@ -33,15 +33,13 @@ When NumLock is on, and a single shift key is held down, pressing a key on the n
                 ((keyData & Keys.KeyCode) == Keys.Menu);
         }
 
-        private void HandleKeyPress(Keys keyData, bool keyDown)
+        private bool HandleKeyPress(Keys keyData, bool keyDown)
         {
             System.Diagnostics.Debug.Print($"{(keyDown ? "Pressed" : "Released")} {keyData}");
 
             //Split keycode from modifiers
             var keyCode = keyData & Keys.KeyCode;
             var modifiers = keyData & Keys.Modifiers;
-
-            txtLog.AppendText($"{(keyDown ? "Pressed" : "Released")} {keyCode} [{modifiers}]" + Environment.NewLine);
 
             //Strip own modifier from modifier keys
             switch (keyCode)
@@ -61,6 +59,12 @@ When NumLock is on, and a single shift key is held down, pressing a key on the n
                     keyData = keyCode | modifiers;
                     break;
             }
+
+            //Log keypress
+            if (modifiers != Keys.None)
+                txtLog.AppendText($"{(keyDown ? "Pressed" : "Released")} {keyCode} [{modifiers}]" + Environment.NewLine);
+            else
+                txtLog.AppendText($"{(keyDown ? "Pressed" : "Released")} {keyCode}" + Environment.NewLine);
 
             //Update numlock text
             if (keyCode == Keys.NumLock)
@@ -124,7 +128,7 @@ When NumLock is on, and a single shift key is held down, pressing a key on the n
             {
                 if (!PressedKeys.TryGetValue(lookupKey, out var lvi))
                 {
-                    //error
+                    txtLog.AppendText($"ERROR: Released {keyCode} without associated press" + Environment.NewLine);
                 }
                 else //remove key
                 {
@@ -137,6 +141,32 @@ When NumLock is on, and a single shift key is held down, pressing a key on the n
                         lvii.SubItems[4].Text = "";
                     }
                 }
+            }
+
+            return true; //indicate message has been handledaaaa
+        }
+
+        private void rbNumLockDefault_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender is RadioButton rb) && (rb.Checked))
+            {
+                NumlockModes = NumPadNumlockModes.Default;
+            }
+        }
+
+        private void rbNumLockShifted_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender is RadioButton rb) && (rb.Checked))
+            {
+                NumlockModes = NumPadNumlockModes.ShiftShifted;
+            }
+        }
+
+        private void rbNumLockIgnore_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender is RadioButton rb) && (rb.Checked))
+            {
+                NumlockModes = NumPadNumlockModes.IgnoreShift;
             }
         }
     }
