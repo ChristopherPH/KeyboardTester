@@ -10,9 +10,10 @@ namespace KeyboardTester
         const int WM_SYSKEYDOWN = 0x104;
         const int WM_SYSKEYUP = 0x105;
 
-        public uint numpadKeysDown = 0;
         public RawInput rawInput;
-        public RawInputKeyStates rawShiftKey;
+        public uint skipShiftUp = 0;
+        public uint skipShiftDown = 0;
+        public uint keysInFakeShift = 0;
 
         enum NumPadNumlockModes
         {
@@ -33,10 +34,6 @@ namespace KeyboardTester
 
         private void InitKeyboardHandler()
         {
-            //Save state of shift key before capturing raw keyboard events
-            rawShiftKey = Control.ModifierKeys.HasFlag(Keys.Shift) ?
-                RawInputKeyStates.Down : RawInputKeyStates.Up;
-
             //Setup raw input capture, used to handle shift numberpad
             //keys when numlock is on
             rawInput = new RawInput(this);
@@ -49,9 +46,30 @@ namespace KeyboardTester
 
         private void rawInput_RawInputKeyboard(object sender, RawInputKeyboardEventArgs e)
         {
-            //Maintain raw shift state
-            if (e.Key == Keys.ShiftKey)
-                rawShiftKey = e.KeyState;
+            //System.Diagnostics.Debug.Print($"RAW {(e.KeyState == RawInputKeyStates.Down ? "Pressed" : "Released")} {e.Key}");
+
+            if (NumlockModes == NumPadNumlockModes.Default)
+                return;
+
+            /* Key is shift, but scancode is not left or right shift
+             * (Scancode will be that of key that generated fake press)
+             * https://learn.microsoft.com/en-us/windows/win32/inputdev/about-keyboard-input
+             * Set flags to skip shift key events inside PreFilterMessage()
+             * as keyboard events can't be skipped here
+             */
+            if ((e.Key == Keys.ShiftKey) && (e.ScanCode != 0x002A) && (e.ScanCode != 0x0036))
+            {
+                if (e.KeyState == RawInputKeyStates.Down)
+                {
+                    skipShiftDown++;
+                    keysInFakeShift--;
+                }
+                else
+                {
+                    skipShiftUp++;
+                    keysInFakeShift++;
+                }
+            }
         }
 
         protected override void WndProc(ref Message m)
@@ -74,17 +92,17 @@ namespace KeyboardTester
                 case WM_SYSKEYDOWN:
                     keyData = (Keys)msg.WParam | ModifierKeys;
 
-                    if ((NumlockModes != NumPadNumlockModes.Default) && (numpadKeysDown > 0))
+                    //Skip shift key event if flagged
+                    if ((skipShiftDown > 0) && ((keyData & Keys.KeyCode) == Keys.ShiftKey))
                     {
-                        if ((keyData & Keys.KeyCode) == Keys.ShiftKey)
-                        {
-                            numpadKeysDown--;
-                            return true;
-                        }
+                        skipShiftDown--;
+                        return true;
+                    }
 
+                    //Fix up number pad keys if within a fake shift block
+                    if (keysInFakeShift > 0)
                         keyData = FixNumberPadKeys(msg, keyData,
                             NumlockModes == NumPadNumlockModes.IgnoreShift);
-                    }
 
                     return HandleKeyPress(keyData, true);
 
@@ -92,23 +110,17 @@ namespace KeyboardTester
                 case WM_SYSKEYUP:
                     keyData = (Keys)msg.WParam | ModifierKeys;
 
-                    if (NumlockModes != NumPadNumlockModes.Default)
+                    //Skip shift key event if flagged
+                    if ((skipShiftUp > 0) && ((keyData & Keys.KeyCode) == Keys.ShiftKey))
                     {
-                        if ((keyData & Keys.KeyCode) == Keys.ShiftKey)
-                        {
-                            var numlock = Control.IsKeyLocked(Keys.NumLock);
-
-                            if (numlock && (rawShiftKey == RawInputKeyStates.Down))
-                            {
-                                numpadKeysDown++;
-                                return true;
-                            }
-                        }
-
-                        if (numpadKeysDown > 0)
-                            keyData = FixNumberPadKeys(msg, keyData,
-                                NumlockModes == NumPadNumlockModes.IgnoreShift);
+                        skipShiftUp--;
+                        return true;
                     }
+
+                    //Fix up number pad keys if within a fake shift block
+                    if (keysInFakeShift > 0)
+                        keyData = FixNumberPadKeys(msg, keyData,
+                            NumlockModes == NumPadNumlockModes.IgnoreShift);
 
                     return HandleKeyPress(keyData, false);
             }

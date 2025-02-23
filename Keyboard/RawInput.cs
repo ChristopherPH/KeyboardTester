@@ -98,10 +98,31 @@ namespace TheBlackRoom.WinForms.Keyboard
             var key = (Keys)keyboard.VKey;
             var flagKeyBreak = (keyboard.Flags & NativeMethods.RI_KEY_BREAK) == NativeMethods.RI_KEY_BREAK;
 
+            /* Fake shift keys have an incorrect break flag and make code, so use
+             * the message member to determine key down/up state instead of break flag.
+             * The make code is that of the key that triggered the fake shift, instead
+             * of the make code being the left or right shift key. */
+            RawInputKeyStates keyState;
+
+            switch (keyboard.Message)
+            {
+                case 0x100: //WM_KEYDOWN
+                case 0x104: //WM_SYSKEYDOWN
+                    keyState = RawInputKeyStates.Down;
+                    break;
+
+                case 0x101: //WM_KEYUP
+                case 0x105: //WM_SYSKEYUP
+                    keyState = RawInputKeyStates.Up;
+                    break;
+
+                default:
+                    return;
+            }
+
             //Raise raw input event
             RawInputKeyboard?.Invoke(this, new RawInputKeyboardEventArgs(key,
-                flagKeyBreak ? RawInputKeyStates.Up : RawInputKeyStates.Down,
-                keyboard.MakeCode, keyboard.Message));
+                keyState, keyboard.MakeCode, keyboard.Message));
         }
 
         protected virtual void OnRawInputKeyboard(RawInputKeyboardEventArgs args)

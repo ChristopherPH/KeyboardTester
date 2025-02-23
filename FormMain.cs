@@ -63,7 +63,7 @@ Holding both shift keys and pressing a key on the numeric keypad will:
 
         private bool HandleKeyPress(Keys keyData, bool keyDown)
         {
-            System.Diagnostics.Debug.Print($"{(keyDown ? "Pressed" : "Released")} {keyData}");
+            //System.Diagnostics.Debug.Print($"    {(keyDown ? "Pressed" : "Released")} {keyData}");
 
             //Split keycode from modifiers
             var keyCode = keyData & Keys.KeyCode;
