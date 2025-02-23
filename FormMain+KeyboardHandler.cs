@@ -17,7 +17,7 @@ namespace KeyboardTester
         enum NumPadNumlockModes
         {
             Default,
-            ShiftShifted,
+            ShiftedNumberKey,
             IgnoreShift,
         }
 

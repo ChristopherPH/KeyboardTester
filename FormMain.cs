@@ -12,19 +12,47 @@ namespace KeyboardTester
 
             InitKeyboardHandler();
 
-            lblNumLock.Text = $"NumLock: {(Control.IsKeyLocked(Keys.NumLock) ? "ON" : "OFF")}";
-
-            lblInstructions.Text = @"Notes:
-
-When NumLock is off, pressing a key on the numeric keypad will trigger a home/end/pgup/pgdown/arrow key.
-
-When NumLock is on, pressing a key on the numeric keypad will trigger a number key.
-
-When NumLock is on, and a single shift key is held down, pressing a key on the numeric keypad will remove the shift, trigger a home/end/pgup/pgdown/arrow key, then add back the shift.
-";
+            CheckNumLock();
         }
 
         public Dictionary<Keys, ListViewItem> PressedKeys = new Dictionary<Keys, ListViewItem>();
+
+        void CheckNumLock()
+        {
+            var numLock = Control.IsKeyLocked(Keys.NumLock);
+
+            rbNumLockDefault.Enabled = numLock;
+            rbNumLockShifted.Enabled = numLock;
+            rbNumLockIgnore.Enabled = numLock;
+
+            if (!numLock)
+            {
+                lblInstructions.Text = @"NumLock is OFF:
+
+Pressing a key on the numeric keypad will:
+ - Trigger Home/End/PgUp/PgDown or Arrow key
+
+Holding a shift key and pressing a key on the numeric keypad will:
+ - Trigger a SHIFTED Home/End/PgUp/PgDown or Arrow key";
+            }
+            else
+            {
+                lblInstructions.Text = @"NumLock is ON:
+
+Pressing a key on the numeric keypad will:
+ - Trigger a number key
+
+Holding a single shift key and pressing a key on the numeric keypad will:
+ - Unpress the shift key
+ - Trigger a Home/End/PgUp/PgDown or Arrow key
+ - Press the shift key
+
+Holding both shift keys and pressing a key on the numeric keypad will:
+ - Unpress one shift key
+ - Trigger a SHIFTED Home/End/PgUp/PgDown or Arrow key
+ - Press the shift key";
+            }
+        }
 
         public static bool CheckOnlyModifier(Keys keyData)
         {
@@ -68,9 +96,7 @@ When NumLock is on, and a single shift key is held down, pressing a key on the n
 
             //Update numlock text
             if (keyCode == Keys.NumLock)
-            {
-                lblNumLock.Text = $"NumLock: {(Control.IsKeyLocked(Keys.NumLock) ? "ON" : "OFF")}";
-            }
+                CheckNumLock();
 
             var lookupKey = keyCode;
 
@@ -143,7 +169,7 @@ When NumLock is on, and a single shift key is held down, pressing a key on the n
                 }
             }
 
-            return true; //indicate message has been handledaaaa
+            return true; //indicate message has been handled
         }
 
         private void rbNumLockDefault_CheckedChanged(object sender, EventArgs e)
@@ -158,7 +184,7 @@ When NumLock is on, and a single shift key is held down, pressing a key on the n
         {
             if ((sender is RadioButton rb) && (rb.Checked))
             {
-                NumlockModes = NumPadNumlockModes.ShiftShifted;
+                NumlockModes = NumPadNumlockModes.ShiftedNumberKey;
             }
         }
 
