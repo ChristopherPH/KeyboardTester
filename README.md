@@ -6,6 +6,17 @@ Goals:
 - Capture key down and key up events before they are processed by Windows
 - Handle the numeric keypad unshifting functionality when numlock is on
 
+## Issues
+
+- Numlock on, default handling
+  - ERROR: Released NumPad4 without associated press (this is expected with default handling)
+    - Hold shift
+    - Hold ctrl
+    - Hold num left
+    - Unpress ctrl
+    - Unpress shift (before repeat delay elapses)
+    - Unpress num left (before repeat delay elapses)
+
 ## Notes
 
 - Keyboard event order
@@ -19,3 +30,6 @@ Goals:
 - `ProcessKeyPreview()` only triggers when there are controls on the form
 - Form level `OnKeyDowm()` and `OnKeyUp()` events only trigger when the form `KeyPreview` property is set to true
   - This is a VB6 compatibility property, and should be avoided when possible
+- Using RawInput and SetWindowsHookEx only works when hooking WH_KEYBOARD, not WH_KEYBOARD_LL
+- Good keyboard stack overflow answers from Hans Passant:
+  - https://stackoverflow.com/questions/26158578/what-is-the-purpose-of-all-process-methods-and-all-messages-filters
