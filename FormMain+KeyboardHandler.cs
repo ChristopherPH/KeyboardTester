@@ -101,7 +101,7 @@ namespace KeyboardTester
 
                     //Fix up number pad keys if within a fake shift block
                     if (keysInFakeShift > 0)
-                        keyData = FixNumberPadKeys(msg, keyData,
+                        keyData = ShiftNumberPadKeys(msg, keyData,
                             NumlockModes == NumPadNumlockModes.IgnoreShift);
 
                     return HandleKeyPress(keyData, true);
@@ -119,7 +119,7 @@ namespace KeyboardTester
 
                     //Fix up number pad keys if within a fake shift block
                     if (keysInFakeShift > 0)
-                        keyData = FixNumberPadKeys(msg, keyData,
+                        keyData = ShiftNumberPadKeys(msg, keyData,
                             NumlockModes == NumPadNumlockModes.IgnoreShift);
 
                     return HandleKeyPress(keyData, false);
@@ -128,30 +128,38 @@ namespace KeyboardTester
             return false;
         }
 
-        private Keys FixNumberPadKeys(Message msg, Keys keyData, bool IgnoreNumlockAndShift)
+        private Keys ShiftNumberPadKeys(Message msg, Keys keyData, bool IgnoreNumlockAndShift)
         {
             var extended = ((msg.LParam.ToInt32() >> 24) & 1) != 0;
 
-            if (((keyData & Keys.Modifiers) == 0) && (!extended))
+            //Split keycode from modifiers
+            var keyCode = keyData & Keys.KeyCode;
+            var modifiers = keyData & Keys.Modifiers;
+
+            //If an unshifted numberpad key, then change the key
+            if (!extended && !modifiers.HasFlag(Keys.Shift))
             {
-                Keys modKey = IgnoreNumlockAndShift ? Keys.None : Keys.Shift;
-
-                switch (keyData)
+                switch (keyCode)
                 {
-                    case Keys.Insert: keyData = (Keys.NumPad0 | modKey); break;
+                    case Keys.Insert: keyCode = Keys.NumPad0; break;
 
-                    case Keys.End: keyData = (Keys.NumPad1 | modKey); break;
-                    case Keys.Down: keyData = (Keys.NumPad2 | modKey); break;
-                    case Keys.PageDown: keyData = (Keys.NumPad3 | modKey); break;
+                    case Keys.End: keyCode = Keys.NumPad1; break;
+                    case Keys.Down: keyCode = Keys.NumPad2; break;
+                    case Keys.PageDown: keyCode = Keys.NumPad3; break;
 
-                    case Keys.Left: keyData = (Keys.NumPad4 | modKey); break;
-                    case Keys.Clear: keyData = (Keys.NumPad5 | modKey); break;
-                    case Keys.Right: keyData = (Keys.NumPad6 | modKey); break;
+                    case Keys.Left: keyCode = Keys.NumPad4; break;
+                    case Keys.Clear: keyCode = Keys.NumPad5; break;
+                    case Keys.Right: keyCode = Keys.NumPad6; break;
 
-                    case Keys.Home: keyData = (Keys.NumPad7 | modKey); break;
-                    case Keys.Up: keyData = (Keys.NumPad8 | modKey); break;
-                    case Keys.PageUp: keyData = (Keys.NumPad9 | modKey); break;
+                    case Keys.Home: keyCode = Keys.NumPad7; break;
+                    case Keys.Up: keyCode = Keys.NumPad8; break;
+                    case Keys.PageUp: keyCode = Keys.NumPad9; break;
                 }
+
+                if (!IgnoreNumlockAndShift)
+                    modifiers |= Keys.Shift;
+
+                keyData = keyCode | modifiers;
             }
 
             return keyData;
