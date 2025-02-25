@@ -113,6 +113,7 @@ namespace KeyboardTester
 
                     //Adjust number pad keys if within a fake shift block
                     keyData = AdjustNumberPadKeyData(msg, keyData,
+                        Control.IsKeyLocked(Keys.NumLock),
                         keysInFakeShift > 0, NumlockMode);
 
                     return HandleKeyPress(keyData, true);
@@ -130,6 +131,7 @@ namespace KeyboardTester
 
                     //Adjust number pad keys if within a fake shift block
                     keyData = AdjustNumberPadKeyData(msg, keyData,
+                        Control.IsKeyLocked(Keys.NumLock),
                         keysInFakeShift > 0, NumlockMode);
 
                     return HandleKeyPress(keyData, false);
@@ -139,9 +141,9 @@ namespace KeyboardTester
         }
 
         private static Keys AdjustNumberPadKeyData(Message msg, Keys keyData,
-            bool inFakeShift, NumberPadAdjustmentModes numlockMode)
+            bool numLock, bool inFakeShift, NumberPadAdjustmentModes adjustmentMode)
         {
-            if (numlockMode == NumberPadAdjustmentModes.Unshift)
+            if (!numLock || (adjustmentMode == NumberPadAdjustmentModes.Unshift))
                 return keyData;
 
             //Split keycode from modifiers
@@ -172,7 +174,7 @@ namespace KeyboardTester
                 }
 
                 //Add shift modifier to the key
-                if (numlockMode == NumberPadAdjustmentModes.Shift)
+                if (adjustmentMode == NumberPadAdjustmentModes.Shift)
                     modifiers |= Keys.Shift;
 
                 //Rebuild key press
