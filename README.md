@@ -44,3 +44,6 @@ Holding down both shift keys can generate errors
 - Using RawInput and SetWindowsHookEx only works when hooking WH_KEYBOARD, not WH_KEYBOARD_LL
 - Good keyboard stack overflow answers from Hans Passant:
   - https://stackoverflow.com/questions/26158578/what-is-the-purpose-of-all-process-methods-and-all-messages-filters
+- RawInput resources:
+  - https://learn.microsoft.com/en-us/windows/win32/inputdev/raw-input?redirectedfrom=MSDN
+  - https://learn.microsoft.com/en-us/windows/win32/inputdev/using-raw-input
