@@ -52,7 +52,7 @@
             this.lblInstructions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblInstructions.Location = new System.Drawing.Point(12, 9);
             this.lblInstructions.Name = "lblInstructions";
-            this.lblInstructions.Size = new System.Drawing.Size(598, 337);
+            this.lblInstructions.Size = new System.Drawing.Size(562, 395);
             this.lblInstructions.TabIndex = 0;
             this.lblInstructions.Text = "Instructions:";
             // 
@@ -69,10 +69,10 @@
             this.lvPressedKeys.FullRowSelect = true;
             this.lvPressedKeys.GridLines = true;
             this.lvPressedKeys.HideSelection = false;
-            this.lvPressedKeys.Location = new System.Drawing.Point(12, 349);
+            this.lvPressedKeys.Location = new System.Drawing.Point(12, 407);
             this.lvPressedKeys.MultiSelect = false;
             this.lvPressedKeys.Name = "lvPressedKeys";
-            this.lvPressedKeys.Size = new System.Drawing.Size(598, 281);
+            this.lvPressedKeys.Size = new System.Drawing.Size(562, 281);
             this.lvPressedKeys.TabIndex = 1;
             this.lvPressedKeys.UseCompatibleStateImageBehavior = false;
             this.lvPressedKeys.View = System.Windows.Forms.View.Details;
@@ -106,18 +106,18 @@
             this.gbNumLock.Controls.Add(this.rbNumLockIgnore);
             this.gbNumLock.Controls.Add(this.rbNumLockShifted);
             this.gbNumLock.Controls.Add(this.rbNumLockDefault);
-            this.gbNumLock.Location = new System.Drawing.Point(616, 9);
+            this.gbNumLock.Location = new System.Drawing.Point(580, 9);
             this.gbNumLock.Name = "gbNumLock";
-            this.gbNumLock.Size = new System.Drawing.Size(336, 334);
+            this.gbNumLock.Size = new System.Drawing.Size(414, 392);
             this.gbNumLock.TabIndex = 2;
             this.gbNumLock.TabStop = false;
             this.gbNumLock.Text = "Shift + Numeric Keypad Handling";
             // 
             // rbNumLockIgnore
             // 
-            this.rbNumLockIgnore.Location = new System.Drawing.Point(17, 182);
+            this.rbNumLockIgnore.Location = new System.Drawing.Point(17, 237);
             this.rbNumLockIgnore.Name = "rbNumLockIgnore";
-            this.rbNumLockIgnore.Size = new System.Drawing.Size(300, 100);
+            this.rbNumLockIgnore.Size = new System.Drawing.Size(375, 100);
             this.rbNumLockIgnore.TabIndex = 5;
             this.rbNumLockIgnore.Text = "Ignore Shift:\r\nInstead of unshifting the number key back to Home/End/Arrows, trig" +
     "ger a number key without shift";
@@ -126,9 +126,9 @@
             // 
             // rbNumLockShifted
             // 
-            this.rbNumLockShifted.Location = new System.Drawing.Point(17, 83);
+            this.rbNumLockShifted.Location = new System.Drawing.Point(17, 131);
             this.rbNumLockShifted.Name = "rbNumLockShifted";
-            this.rbNumLockShifted.Size = new System.Drawing.Size(300, 100);
+            this.rbNumLockShifted.Size = new System.Drawing.Size(375, 100);
             this.rbNumLockShifted.TabIndex = 4;
             this.rbNumLockShifted.Text = "Shifted Number Key:\r\nInstead of unshifting the number key back to Home/End/Arrows" +
     ", trigger a SHIFTED number key";
@@ -140,27 +140,28 @@
             this.rbNumLockDefault.Checked = true;
             this.rbNumLockDefault.Location = new System.Drawing.Point(17, 25);
             this.rbNumLockDefault.Name = "rbNumLockDefault";
-            this.rbNumLockDefault.Size = new System.Drawing.Size(300, 50);
+            this.rbNumLockDefault.Size = new System.Drawing.Size(375, 100);
             this.rbNumLockDefault.TabIndex = 0;
             this.rbNumLockDefault.TabStop = true;
-            this.rbNumLockDefault.Text = "Default:\r\nAuto unshift, trigger keypress, re-shift";
+            this.rbNumLockDefault.Text = "Standard Windows behaviour (unshift):\r\nFake unshift, trigger keypress, fake shift" +
+    "\r\nTreat as if numlock is off and shift is not held down";
             this.rbNumLockDefault.UseVisualStyleBackColor = true;
             this.rbNumLockDefault.CheckedChanged += new System.EventHandler(this.rbNumLockDefault_CheckedChanged);
             // 
             // txtLog
             // 
             this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLog.Location = new System.Drawing.Point(616, 349);
+            this.txtLog.Location = new System.Drawing.Point(580, 407);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(336, 281);
+            this.txtLog.Size = new System.Drawing.Size(414, 281);
             this.txtLog.TabIndex = 3;
             // 
             // chkIgnoreFakeShift
             // 
-            this.chkIgnoreFakeShift.Location = new System.Drawing.Point(17, 288);
+            this.chkIgnoreFakeShift.Location = new System.Drawing.Point(17, 343);
             this.chkIgnoreFakeShift.Name = "chkIgnoreFakeShift";
             this.chkIgnoreFakeShift.Size = new System.Drawing.Size(300, 31);
             this.chkIgnoreFakeShift.TabIndex = 6;
@@ -172,7 +173,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(964, 642);
+            this.ClientSize = new System.Drawing.Size(1006, 700);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.gbNumLock);
             this.Controls.Add(this.lvPressedKeys);

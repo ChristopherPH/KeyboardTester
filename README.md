@@ -8,7 +8,7 @@ Goals:
 
 ## Known Issues
 
-- Numlock on, using `Default Handling`
+- Numlock on, using standard windows behaviour
   - ERROR: Released NumPad4 without associated press (this is expected with default handling)
     - Hold shift
     - Hold ctrl
@@ -16,6 +16,17 @@ Goals:
     - Unpress ctrl
     - Unpress shift (before repeat delay elapses)
     - Unpress num left (before repeat delay elapses)
+
+Holding down both shift keys can generate errors
+
+- Numlock on, using adjustment mode of `Shift`
+  - ERROR: Released NumPad4 without associated press
+    - Hold left shift
+    - Hold right shift
+    - Hold num left
+    - Unpress left shift
+    - Unpress right shift
+    - Unpress num left
 
 ## Notes
 

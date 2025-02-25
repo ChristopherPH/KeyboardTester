@@ -40,6 +40,8 @@ Holding a shift key and pressing a key on the numeric keypad will:
             {
                 lblInstructions.Text = @"NumLock is ON:
 
+When using standard Windows behaviour:
+
 Pressing a key on the numeric keypad will:
  - Trigger a number key
 
