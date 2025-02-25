@@ -40,6 +40,7 @@
             this.rbNumLockShifted = new System.Windows.Forms.RadioButton();
             this.rbNumLockDefault = new System.Windows.Forms.RadioButton();
             this.txtLog = new System.Windows.Forms.TextBox();
+            this.chkIgnoreFakeShift = new System.Windows.Forms.CheckBox();
             this.gbNumLock.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,7 +52,7 @@
             this.lblInstructions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblInstructions.Location = new System.Drawing.Point(12, 9);
             this.lblInstructions.Name = "lblInstructions";
-            this.lblInstructions.Size = new System.Drawing.Size(598, 293);
+            this.lblInstructions.Size = new System.Drawing.Size(598, 337);
             this.lblInstructions.TabIndex = 0;
             this.lblInstructions.Text = "Instructions:";
             // 
@@ -68,7 +69,7 @@
             this.lvPressedKeys.FullRowSelect = true;
             this.lvPressedKeys.GridLines = true;
             this.lvPressedKeys.HideSelection = false;
-            this.lvPressedKeys.Location = new System.Drawing.Point(12, 305);
+            this.lvPressedKeys.Location = new System.Drawing.Point(12, 349);
             this.lvPressedKeys.MultiSelect = false;
             this.lvPressedKeys.Name = "lvPressedKeys";
             this.lvPressedKeys.Size = new System.Drawing.Size(598, 281);
@@ -101,12 +102,13 @@
             // 
             this.gbNumLock.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbNumLock.Controls.Add(this.chkIgnoreFakeShift);
             this.gbNumLock.Controls.Add(this.rbNumLockIgnore);
             this.gbNumLock.Controls.Add(this.rbNumLockShifted);
             this.gbNumLock.Controls.Add(this.rbNumLockDefault);
             this.gbNumLock.Location = new System.Drawing.Point(616, 9);
             this.gbNumLock.Name = "gbNumLock";
-            this.gbNumLock.Size = new System.Drawing.Size(336, 290);
+            this.gbNumLock.Size = new System.Drawing.Size(336, 334);
             this.gbNumLock.TabIndex = 2;
             this.gbNumLock.TabStop = false;
             this.gbNumLock.Text = "Shift + Numeric Keypad Handling";
@@ -148,7 +150,7 @@
             // txtLog
             // 
             this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLog.Location = new System.Drawing.Point(616, 305);
+            this.txtLog.Location = new System.Drawing.Point(616, 349);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
@@ -156,11 +158,21 @@
             this.txtLog.Size = new System.Drawing.Size(336, 281);
             this.txtLog.TabIndex = 3;
             // 
+            // chkIgnoreFakeShift
+            // 
+            this.chkIgnoreFakeShift.Location = new System.Drawing.Point(17, 288);
+            this.chkIgnoreFakeShift.Name = "chkIgnoreFakeShift";
+            this.chkIgnoreFakeShift.Size = new System.Drawing.Size(300, 31);
+            this.chkIgnoreFakeShift.TabIndex = 6;
+            this.chkIgnoreFakeShift.Text = "Ignore fake shift keypresses";
+            this.chkIgnoreFakeShift.UseVisualStyleBackColor = true;
+            this.chkIgnoreFakeShift.CheckedChanged += new System.EventHandler(this.chkIgnoreFakeShift_CheckedChanged);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(964, 598);
+            this.ClientSize = new System.Drawing.Size(964, 642);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.gbNumLock);
             this.Controls.Add(this.lvPressedKeys);
@@ -189,6 +201,7 @@
         private System.Windows.Forms.RadioButton rbNumLockIgnore;
         private System.Windows.Forms.RadioButton rbNumLockShifted;
         private System.Windows.Forms.TextBox txtLog;
+        private System.Windows.Forms.CheckBox chkIgnoreFakeShift;
     }
 }
 

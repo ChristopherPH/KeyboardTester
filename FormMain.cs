@@ -24,6 +24,7 @@ namespace KeyboardTester
             rbNumLockDefault.Enabled = numLock;
             rbNumLockShifted.Enabled = numLock;
             rbNumLockIgnore.Enabled = numLock;
+            chkIgnoreFakeShift.Enabled = numLock;
 
             if (!numLock)
             {
@@ -180,7 +181,7 @@ Holding both shift keys and pressing a key on the numeric keypad will:
         {
             if ((sender is RadioButton rb) && (rb.Checked))
             {
-                NumlockModes = NumPadNumlockModes.Default;
+                NumlockMode = NumberPadAdjustmentModes.Unshift;
             }
         }
 
@@ -188,7 +189,7 @@ Holding both shift keys and pressing a key on the numeric keypad will:
         {
             if ((sender is RadioButton rb) && (rb.Checked))
             {
-                NumlockModes = NumPadNumlockModes.ShiftedNumberKey;
+                NumlockMode = NumberPadAdjustmentModes.Shift;
             }
         }
 
@@ -196,8 +197,14 @@ Holding both shift keys and pressing a key on the numeric keypad will:
         {
             if ((sender is RadioButton rb) && (rb.Checked))
             {
-                NumlockModes = NumPadNumlockModes.IgnoreShift;
+                NumlockMode = NumberPadAdjustmentModes.Ignore;
             }
+        }
+
+        private void chkIgnoreFakeShift_CheckedChanged(object sender, EventArgs e)
+        {
+            if (sender is CheckBox cb)
+                SkipFakeShiftKeyPresses = cb.Checked;
         }
     }
 }

@@ -10,27 +10,38 @@ namespace KeyboardTester
         const int WM_SYSKEYDOWN = 0x104;
         const int WM_SYSKEYUP = 0x105;
 
-        public RawInput rawInput;
-        public uint skipShiftUp = 0;
-        public uint skipShiftDown = 0;
-        public uint keysInFakeShift = 0;
+        private RawInput rawInput;
+        private uint skipShiftUp = 0;
+        private uint skipShiftDown = 0;
+        private uint keysInFakeShift = 0;
 
-        enum NumPadNumlockModes
+        /// <summary>
+        /// Numeric Keypad adjustment modes:
+        /// When NumLock is ON, shift is held down, and a numeric keypad key is pressed
+        /// </summary>
+        enum NumberPadAdjustmentModes
         {
-            Default,
-            ShiftedNumberKey,
-            IgnoreShift,
+            /// <summary>
+            /// Unshift numeric keypad key (This is standard Windows behaviour)
+            /// Treat as if numlock is off and shift is not held down
+            /// </summary>
+            Unshift,
+
+            /// <summary>
+            /// Shift the numeric keypad key
+            /// </summary>
+            Shift,
+
+            /// <summary>
+            /// Ignore the shift key
+            /// </summary>
+            Ignore,
         }
 
-        NumPadNumlockModes NumlockModes
-        {
-            get => _numlockModes;
-            set
-            {
-                _numlockModes = value;
-            }
-        }
-        NumPadNumlockModes _numlockModes = NumPadNumlockModes.Default;
+        bool SkipFakeShiftKeyPresses { get; set; } = false;
+
+
+        NumberPadAdjustmentModes NumlockMode { get; set; } = NumberPadAdjustmentModes.Unshift;
 
         private void InitKeyboardHandler()
         {
@@ -48,9 +59,6 @@ namespace KeyboardTester
         {
             //System.Diagnostics.Debug.Print($"RAW {(e.KeyState == RawInputKeyStates.Down ? "Pressed" : "Released")} {e.Key}");
 
-            if (NumlockModes == NumPadNumlockModes.Default)
-                return;
-
             /* Key is shift, but scancode is not left or right shift
              * (Scancode will be that of key that generated fake press)
              * https://learn.microsoft.com/en-us/windows/win32/inputdev/about-keyboard-input
@@ -61,12 +69,16 @@ namespace KeyboardTester
             {
                 if (e.KeyState == RawInputKeyStates.Down)
                 {
-                    skipShiftDown++;
+                    if (SkipFakeShiftKeyPresses)
+                        skipShiftDown++;
+
                     keysInFakeShift--;
                 }
                 else
                 {
-                    skipShiftUp++;
+                    if (SkipFakeShiftKeyPresses)
+                        skipShiftUp++;
+
                     keysInFakeShift++;
                 }
             }
@@ -100,9 +112,8 @@ namespace KeyboardTester
                     }
 
                     //Adjust number pad keys if within a fake shift block
-                    if (keysInFakeShift > 0)
-                        keyData = AdjustNumberPadKeyData(msg, keyData,
-                            NumlockModes == NumPadNumlockModes.IgnoreShift);
+                    keyData = AdjustNumberPadKeyData(msg, keyData,
+                        keysInFakeShift > 0, NumlockMode);
 
                     return HandleKeyPress(keyData, true);
 
@@ -118,9 +129,8 @@ namespace KeyboardTester
                     }
 
                     //Adjust number pad keys if within a fake shift block
-                    if (keysInFakeShift > 0)
-                        keyData = AdjustNumberPadKeyData(msg, keyData,
-                            NumlockModes == NumPadNumlockModes.IgnoreShift);
+                    keyData = AdjustNumberPadKeyData(msg, keyData,
+                        keysInFakeShift > 0, NumlockMode);
 
                     return HandleKeyPress(keyData, false);
             }
@@ -128,8 +138,12 @@ namespace KeyboardTester
             return false;
         }
 
-        private Keys AdjustNumberPadKeyData(Message msg, Keys keyData, bool SkipShift = false)
+        private static Keys AdjustNumberPadKeyData(Message msg, Keys keyData,
+            bool inFakeShift, NumberPadAdjustmentModes numlockMode)
         {
+            if (numlockMode == NumberPadAdjustmentModes.Unshift)
+                return keyData;
+
             //Split keycode from modifiers
             var keyCode = keyData & Keys.KeyCode;
             var modifiers = keyData & Keys.Modifiers;
@@ -158,7 +172,7 @@ namespace KeyboardTester
                 }
 
                 //Add shift modifier to the key
-                if (!SkipShift)
+                if (numlockMode == NumberPadAdjustmentModes.Shift)
                     modifiers |= Keys.Shift;
 
                 //Rebuild key press
