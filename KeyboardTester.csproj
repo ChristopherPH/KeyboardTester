@@ -57,6 +57,8 @@
     </Compile>
     <Compile Include="Keyboard\RawInput+NativeMethods.cs" />
     <Compile Include="Keyboard\RawInput.cs" />
+    <Compile Include="Keyboard\RawInputKeyboardEventArgs.cs" />
+    <Compile Include="Keyboard\RawInputKeyStates.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormMain.resx">

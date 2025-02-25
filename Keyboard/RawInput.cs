@@ -106,13 +106,13 @@ namespace TheBlackRoom.WinForms.Keyboard
 
             switch (keyboard.Message)
             {
-                case 0x100: //WM_KEYDOWN
-                case 0x104: //WM_SYSKEYDOWN
+                case NativeMethods.WM_KEYDOWN:
+                case NativeMethods.WM_SYSKEYDOWN:
                     keyState = RawInputKeyStates.Down;
                     break;
 
-                case 0x101: //WM_KEYUP
-                case 0x105: //WM_SYSKEYUP
+                case NativeMethods.WM_KEYUP:
+                case NativeMethods.WM_SYSKEYUP:
                     keyState = RawInputKeyStates.Up;
                     break;
 
@@ -122,7 +122,8 @@ namespace TheBlackRoom.WinForms.Keyboard
 
             //Raise raw input event
             RawInputKeyboard?.Invoke(this, new RawInputKeyboardEventArgs(key,
-                keyState, keyboard.MakeCode, keyboard.Message));
+                keyState, keyboard.MakeCode, keyboard.Flags, keyboard.Message,
+                keyboard.ExtraInformation));
         }
 
         protected virtual void OnRawInputKeyboard(RawInputKeyboardEventArgs args)
@@ -159,33 +160,5 @@ namespace TheBlackRoom.WinForms.Keyboard
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
-    }
-
-    /// <summary>
-    /// Event data for Raw Keyboard Input
-    /// </summary>
-    public class RawInputKeyboardEventArgs : EventArgs
-    {
-        public RawInputKeyboardEventArgs(Keys Key, RawInputKeyStates KeyState, uint ScanCode, uint Message)
-        {
-            this.Key = Key;
-            this.KeyState = KeyState;
-            this.ScanCode = ScanCode;
-            this.Message = Message;
-        }
-
-        public Keys Key { get; }
-        public RawInputKeyStates KeyState { get; }
-        public uint ScanCode { get; }
-        public uint Message { get; }
-    }
-
-    /// <summary>
-    /// Raw Keyboard Input Key States
-    /// </summary>
-    public enum RawInputKeyStates
-    {
-        Down,
-        Up
     }
 }
