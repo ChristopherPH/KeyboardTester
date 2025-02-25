@@ -55,6 +55,7 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Keyboard\KeyboardUtility.cs" />
     <Compile Include="Keyboard\RawInput+NativeMethods.cs" />
     <Compile Include="Keyboard\RawInput.cs" />
     <Compile Include="Keyboard\RawInputKeyboardEventArgs.cs" />

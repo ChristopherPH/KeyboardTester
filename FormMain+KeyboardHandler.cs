@@ -5,11 +5,6 @@ namespace KeyboardTester
 {
     public partial class FormMain : IMessageFilter
     {
-        const int WM_KEYDOWN = 0x100;
-        const int WM_KEYUP = 0x101;
-        const int WM_SYSKEYDOWN = 0x104;
-        const int WM_SYSKEYUP = 0x105;
-
         private RawInput rawInput;
         private uint skipShiftUp = 0;
         private uint skipShiftDown = 0;
@@ -100,8 +95,8 @@ namespace KeyboardTester
 
             switch (msg.Msg)
             {
-                case WM_KEYDOWN:
-                case WM_SYSKEYDOWN:
+                case KeyboardUtility.WM_KEYDOWN:
+                case KeyboardUtility.WM_SYSKEYDOWN:
                     keyData = (Keys)msg.WParam | ModifierKeys;
 
                     //Skip shift key event if flagged
@@ -118,8 +113,8 @@ namespace KeyboardTester
 
                     return HandleKeyPress(keyData, true);
 
-                case WM_KEYUP:
-                case WM_SYSKEYUP:
+                case KeyboardUtility.WM_KEYUP:
+                case KeyboardUtility.WM_SYSKEYUP:
                     keyData = (Keys)msg.WParam | ModifierKeys;
 
                     //Skip shift key event if flagged
@@ -150,10 +145,19 @@ namespace KeyboardTester
             var keyCode = keyData & Keys.KeyCode;
             var modifiers = keyData & Keys.Modifiers;
 
-            //Get extended flag from message
-            var extended = ((msg.LParam.ToInt32() >> 24) & 1) != 0;
+            /* Get extended flag from message:
+             * https://learn.microsoft.com/en-us/windows/win32/inputdev/about-keyboard-input#extended-key-flag
+             * var extended = ((msg.LParam.ToInt32() >> 24) & 1) != 0; */
+            if (!KeyboardUtility.ParseKeyboardMessage(msg, Keys.None, out _, out _, out var flags, out _))
+                return keyData;
 
-            //If the key is an unshifted numberpad key, then update the key
+            var extended = flags.HasFlag(KeyboardUtility.KeystrokeFlags.KF_EXTENDED);
+
+            /* The shifted keys are the arrows and INS, DEL, HOME, END, PAGE UP, PAGE DOWN. Reading the following:
+             * https://docs.microsoft.com/en-us/windows/win32/inputdev/about-keyboard-input#keystroke-message-flags
+             * notes that the arrows and INS, DEL, HOME, END, PAGE UP, PAGE DOWN not on the numeric keypad get
+             * an extended flag (lParam bit 24), so we can assume if this flag is false for those keys, we are
+             * using the numeric keypad. So if the key is an unshifted numberpad key, update the key */
             if (!extended && !modifiers.HasFlag(Keys.Shift))
             {
                 switch (keyCode)
