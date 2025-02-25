@@ -40,15 +40,49 @@ namespace TheBlackRoom.WinForms.Keyboard
             this.ExtraInformation = ExtraInformation;
         }
 
+        /// <summary>
+        /// Legacy virtual key code
+        /// </summary>
         public Keys Key { get; }
+
+        /// <summary>
+        /// Raw Input Key State (Up, Down)
+        /// </summary>
         public RawInputKeyStates KeyState { get; }
+
+        /// <summary>
+        /// Keyboard scan code
+        /// </summary>
         public ushort ScanCode { get; }
+
+        /// <summary>
+        /// Scan code flags
+        /// </summary>
         public ushort Flags { get; }
+
+        /// <summary>
+        /// Legacy windows keyboard message (WM_KEYDOWN, WM_KEYUP, WM_SYSKEYDOWN, WM_SYSKEYUP)
+        /// </summary>
         public uint Message { get; }
+
+        /// <summary>
+        /// The device-specific additional information for the event
+        /// </summary>
         public ulong ExtraInformation { get; }
 
+        /// <summary>
+        /// Flag indicating key is up (unless a fake shift)
+        /// </summary>
         public bool FlagsKeyBreak => (Flags & RawInput.NativeMethods.RI_KEY_BREAK) == RawInput.NativeMethods.RI_KEY_BREAK;
+
+        /// <summary>
+        /// Flag indicating scan code has the E0 prefix
+        /// </summary>
         public bool FlagsE0 => (Flags & RawInput.NativeMethods.RI_KEY_E0) == RawInput.NativeMethods.RI_KEY_E0;
+
+        /// <summary>
+        /// Flag indicating scan code has the E1 prefix
+        /// </summary>
         public bool FlagsE1 => (Flags & RawInput.NativeMethods.RI_KEY_E1) == RawInput.NativeMethods.RI_KEY_E1;
     }
 }
