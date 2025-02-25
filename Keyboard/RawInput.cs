@@ -115,9 +115,12 @@ namespace TheBlackRoom.WinForms.Keyboard
             if (keyboard.VKey == NativeMethods.KEYBOARD_OVERRUN_MAKE_CODE)
                 return;
 
-            //Convert raw input
+            //Convert virtual key to keys enum
             var key = (Keys)keyboard.VKey;
-            var flagKeyBreak = (keyboard.Flags & NativeMethods.RI_KEY_BREAK) == NativeMethods.RI_KEY_BREAK;
+
+            //TODO: Convert makecode to scan code as per API documentation
+            //https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-rawkeyboard#remarks
+            var scanCode = keyboard.MakeCode;
 
             /* Fake shift keys have an incorrect break flag and make code, so use
              * the message member to determine key down/up state instead of break flag.
@@ -143,7 +146,7 @@ namespace TheBlackRoom.WinForms.Keyboard
 
             //Raise raw input event
             RawInputKeyboard?.Invoke(this, new RawInputKeyboardEventArgs(key,
-                keyState, keyboard.MakeCode, keyboard.Flags, keyboard.Message,
+                keyState, scanCode, keyboard.Flags, keyboard.Message,
                 keyboard.ExtraInformation));
         }
 
