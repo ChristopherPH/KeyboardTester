@@ -75,27 +75,62 @@ namespace KeyboardTester
         {
             //System.Diagnostics.Debug.Print($"RAW {(e.KeyState == RawInputKeyStates.Down ? "Pressed" : "Released")} {e.Key}");
 
-            /* Key is shift, but scancode is not left or right shift
-             * (Scancode will be that of key that generated fake press)
-             * https://learn.microsoft.com/en-us/windows/win32/inputdev/about-keyboard-input
-             * Set flags to skip shift key events inside PreFilterMessage()
-             * as keyboard events can't be skipped here
-             */
-            if ((e.Key == Keys.ShiftKey) && (e.ScanCode != 0x002A) && (e.ScanCode != 0x0036))
+            /* Check for any 'fake' shift keys:
+             * A fake shift will generally come before a real keypress, and the fake
+             * shift scancode and keybreak flags match that of the real keypress event.
+             * Set flags to skip shift key events inside PreFilterMessage() as keyboard
+             * events can't be skipped using raw input. */
+            if (e.Key == Keys.ShiftKey)
             {
-                if (e.KeyState == RawInputKeyStates.Down)
-                {
-                    if (SkipFakeShiftKeyPresses)
-                        skipShiftDown++;
+                /* Set flag if the key is a shift key, but scancode is not left or right shift
+                 * (The scancode will be that of key that generated fake press)
+                 * https://learn.microsoft.com/en-us/windows/win32/inputdev/about-keyboard-input */
+                bool shiftScanCode = (e.ScanCode == 0x002A) || (e.ScanCode == 0x0036);
 
-                    keysInFakeShift--;
+                /* Set flag if the WM_KEYDOWN/WM_KEYUP event doesn't match the
+                 * KeyBreak (key up) flag */
+                bool keyStateMismatch = (e.KeyState == RawInputKeyStates.Down) == e.FlagsKeyBreak;
+
+                /* Handle shift key up */
+                if (e.KeyState == RawInputKeyStates.Up)
+                {
+                    /* A fake shift up always comes before the real keypress, so its safe
+                     * to just check for a scancode mismatch to determine a fake shift up
+                     * Note: If keyStateMismatch is true, then the previous raw input was
+                     *       either a fake or real a shift down. */
+                    if (!shiftScanCode)
+                    {
+                        if (SkipFakeShiftKeyPresses)
+                            skipShiftUp++;
+
+                        keysInFakeShift++;
+                    }
                 }
-                else
+                else if (e.KeyState == RawInputKeyStates.Down)
                 {
-                    if (SkipFakeShiftKeyPresses)
-                        skipShiftUp++;
+                    /* A fake shift down doesn't always comes before the real keypress, so
+                     * check for a scancode mismatch to determine if a fake shift down,
+                     * then check for a keyStateMismatch while in a fake shift.
+                     * Note: If shiftScanCode is false and keyStateMismatch is false,
+                     *       then the next raw input will be fake a shift up.
+                     * Note: If keyStateMismatch is true, then the next raw input will be
+                     *       real a shift up. */
+                    if (!shiftScanCode || (keyStateMismatch && (keysInFakeShift > 0)))
+                    {
+                        if (SkipFakeShiftKeyPresses)
+                            skipShiftDown++;
 
-                    keysInFakeShift++;
+                        keysInFakeShift--;
+                    }
+                    else if (keysInFakeShift > 0)
+                    {
+                        /* If a real shift happens when there are still keysInFakeShift,
+                         * a fake shift down was not generated due to repeating real shift key,
+                         * so the outstanding keysInFakeShift needs to be cleared.
+                         * Note: When this happens, the last fake shift up would have been
+                         *       preceeded by a real shift down */
+                        keysInFakeShift = 0;
+                    }
                 }
             }
         }
