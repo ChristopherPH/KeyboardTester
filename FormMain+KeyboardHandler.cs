@@ -159,7 +159,9 @@ namespace KeyboardTester
         private static Keys AdjustNumberPadKeyData(Message msg, Keys keyData,
             bool numLock, bool inFakeShift, NumberPadAdjustmentModes adjustmentMode)
         {
-            if (!numLock || (adjustmentMode == NumberPadAdjustmentModes.Unshift))
+            //Only need to adjust when numlock is on, and in a fake shift,
+            //and adjustment mode is not the default.
+            if (!numLock || !inFakeShift || (adjustmentMode == NumberPadAdjustmentModes.Unshift))
                 return keyData;
 
             //Split keycode from modifiers
