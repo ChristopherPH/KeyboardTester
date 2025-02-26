@@ -36,29 +36,29 @@
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gbNumLock = new System.Windows.Forms.GroupBox();
+            this.chkIgnoreFakeShift = new System.Windows.Forms.CheckBox();
             this.rbNumLockIgnore = new System.Windows.Forms.RadioButton();
             this.rbNumLockShifted = new System.Windows.Forms.RadioButton();
             this.rbNumLockDefault = new System.Windows.Forms.RadioButton();
             this.txtLog = new System.Windows.Forms.TextBox();
-            this.chkIgnoreFakeShift = new System.Windows.Forms.CheckBox();
+            this.txtRawLog = new System.Windows.Forms.TextBox();
             this.gbNumLock.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblInstructions
             // 
-            this.lblInstructions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblInstructions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblInstructions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblInstructions.Location = new System.Drawing.Point(12, 9);
             this.lblInstructions.Name = "lblInstructions";
-            this.lblInstructions.Size = new System.Drawing.Size(562, 395);
+            this.lblInstructions.Size = new System.Drawing.Size(528, 395);
             this.lblInstructions.TabIndex = 0;
             this.lblInstructions.Text = "Instructions:";
             // 
             // lvPressedKeys
             // 
-            this.lvPressedKeys.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvPressedKeys.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvPressedKeys.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
@@ -69,10 +69,10 @@
             this.lvPressedKeys.FullRowSelect = true;
             this.lvPressedKeys.GridLines = true;
             this.lvPressedKeys.HideSelection = false;
-            this.lvPressedKeys.Location = new System.Drawing.Point(12, 407);
+            this.lvPressedKeys.Location = new System.Drawing.Point(12, 410);
             this.lvPressedKeys.MultiSelect = false;
             this.lvPressedKeys.Name = "lvPressedKeys";
-            this.lvPressedKeys.Size = new System.Drawing.Size(562, 281);
+            this.lvPressedKeys.Size = new System.Drawing.Size(528, 245);
             this.lvPressedKeys.TabIndex = 1;
             this.lvPressedKeys.UseCompatibleStateImageBehavior = false;
             this.lvPressedKeys.View = System.Windows.Forms.View.Details;
@@ -100,18 +100,27 @@
             // 
             // gbNumLock
             // 
-            this.gbNumLock.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbNumLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gbNumLock.Controls.Add(this.chkIgnoreFakeShift);
             this.gbNumLock.Controls.Add(this.rbNumLockIgnore);
             this.gbNumLock.Controls.Add(this.rbNumLockShifted);
             this.gbNumLock.Controls.Add(this.rbNumLockDefault);
-            this.gbNumLock.Location = new System.Drawing.Point(580, 9);
+            this.gbNumLock.Location = new System.Drawing.Point(546, 9);
             this.gbNumLock.Name = "gbNumLock";
-            this.gbNumLock.Size = new System.Drawing.Size(414, 392);
+            this.gbNumLock.Size = new System.Drawing.Size(414, 395);
             this.gbNumLock.TabIndex = 2;
             this.gbNumLock.TabStop = false;
             this.gbNumLock.Text = "Shift + Numeric Keypad Handling";
+            // 
+            // chkIgnoreFakeShift
+            // 
+            this.chkIgnoreFakeShift.Location = new System.Drawing.Point(17, 343);
+            this.chkIgnoreFakeShift.Name = "chkIgnoreFakeShift";
+            this.chkIgnoreFakeShift.Size = new System.Drawing.Size(300, 31);
+            this.chkIgnoreFakeShift.TabIndex = 6;
+            this.chkIgnoreFakeShift.Text = "Ignore fake shift keypresses";
+            this.chkIgnoreFakeShift.UseVisualStyleBackColor = true;
+            this.chkIgnoreFakeShift.CheckedChanged += new System.EventHandler(this.chkIgnoreFakeShift_CheckedChanged);
             // 
             // rbNumLockIgnore
             // 
@@ -150,30 +159,34 @@
             // 
             // txtLog
             // 
-            this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLog.Location = new System.Drawing.Point(580, 407);
+            this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLog.Location = new System.Drawing.Point(546, 410);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(414, 281);
+            this.txtLog.Size = new System.Drawing.Size(414, 245);
             this.txtLog.TabIndex = 3;
             // 
-            // chkIgnoreFakeShift
+            // txtRawLog
             // 
-            this.chkIgnoreFakeShift.Location = new System.Drawing.Point(17, 343);
-            this.chkIgnoreFakeShift.Name = "chkIgnoreFakeShift";
-            this.chkIgnoreFakeShift.Size = new System.Drawing.Size(300, 31);
-            this.chkIgnoreFakeShift.TabIndex = 6;
-            this.chkIgnoreFakeShift.Text = "Ignore fake shift keypresses";
-            this.chkIgnoreFakeShift.UseVisualStyleBackColor = true;
-            this.chkIgnoreFakeShift.CheckedChanged += new System.EventHandler(this.chkIgnoreFakeShift_CheckedChanged);
+            this.txtRawLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtRawLog.Location = new System.Drawing.Point(12, 661);
+            this.txtRawLog.Multiline = true;
+            this.txtRawLog.Name = "txtRawLog";
+            this.txtRawLog.ReadOnly = true;
+            this.txtRawLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtRawLog.Size = new System.Drawing.Size(948, 151);
+            this.txtRawLog.TabIndex = 4;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1006, 700);
+            this.ClientSize = new System.Drawing.Size(972, 821);
+            this.Controls.Add(this.txtRawLog);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.gbNumLock);
             this.Controls.Add(this.lvPressedKeys);
@@ -203,6 +216,7 @@
         private System.Windows.Forms.RadioButton rbNumLockShifted;
         private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.CheckBox chkIgnoreFakeShift;
+        private System.Windows.Forms.TextBox txtRawLog;
     }
 }
 

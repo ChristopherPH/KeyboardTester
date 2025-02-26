@@ -118,9 +118,9 @@ Holding both shift keys and pressing a key on the numeric keypad will:
 
             //Log keypress
             if (adjustedModifiers != Keys.None)
-                txtLog.AppendText($"{(keyDown ? "Pressed" : "Released")} {keyCode} [{adjustedModifiers}]" + Environment.NewLine);
+                Log($"{(keyDown ? "Pressed" : "Released")} {keyCode} [{adjustedModifiers}]");
             else
-                txtLog.AppendText($"{(keyDown ? "Pressed" : "Released")} {keyCode}" + Environment.NewLine);
+                Log($"{(keyDown ? "Pressed" : "Released")} {keyCode}");
 
             //Update numlock text
             if (keyCode == Keys.NumLock)
@@ -228,6 +228,24 @@ Holding both shift keys and pressing a key on the numeric keypad will:
         {
             if (sender is CheckBox cb)
                 SkipFakeShiftKeyPresses = cb.Checked;
+        }
+
+        private void Log(string message)
+        {
+            if (txtLog.TextLength == 0)
+                txtLog.Text = message;
+            else
+                txtLog.AppendText(Environment.NewLine + message);
+        }
+
+        private void LogRaw(string message)
+        {
+            if (txtRawLog.TextLength == 0)
+                txtRawLog.Text = message;
+            else
+                txtRawLog.AppendText(message + Environment.NewLine);
+
+            System.Diagnostics.Debug.Print(message);
         }
     }
 }
