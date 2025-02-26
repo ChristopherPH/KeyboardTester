@@ -100,10 +100,17 @@ namespace KeyboardTester
                      *       either a fake or real a shift down. */
                     if (!shiftScanCode)
                     {
+                        System.Diagnostics.Debug.Print($"[{keysInFakeShift}] Released {e.Key}/0x{e.ScanCode:X} (Fake Shift Up)" +
+                            $"{(!keyStateMismatch ? " (Prev was Real/Fake Shift Down)" : "")} ");
+
                         if (SkipFakeShiftKeyPresses)
                             skipShiftUp++;
 
                         keysInFakeShift++;
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.Print($"[{keysInFakeShift}] Released {e.Key}/0x{e.ScanCode:X} (Real Shift Up)");
                     }
                 }
                 else if (e.KeyState == RawInputKeyStates.Down)
@@ -121,6 +128,13 @@ namespace KeyboardTester
                             skipShiftDown++;
 
                         keysInFakeShift--;
+
+                        if (!shiftScanCode)
+                            System.Diagnostics.Debug.Print($"[{keysInFakeShift}] Pressed {e.Key}/0x{e.ScanCode:X} (Fake Shift Down)" +
+                                $"{(!keyStateMismatch ? " (Next is Fake Shift Up)" : "")} ");
+                        else
+                            System.Diagnostics.Debug.Print($"[{keysInFakeShift}] Pressed {e.Key}/0x{e.ScanCode:X} (Fake Shift Down)" +
+                                $" (Next is Real Shift Up)");
                     }
                     else if (keysInFakeShift > 0)
                     {
@@ -129,9 +143,20 @@ namespace KeyboardTester
                          * so the outstanding keysInFakeShift needs to be cleared.
                          * Note: When this happens, the last fake shift up would have been
                          *       preceeded by a real shift down */
+                        System.Diagnostics.Debug.Print($"[{keysInFakeShift}] " +  $"Missing Fake Shift due to repeating Real Shift Down");
+
                         keysInFakeShift = 0;
                     }
+                    else
+                    {
+                        System.Diagnostics.Debug.Print($"[{keysInFakeShift}] Pressed {e.Key}/0x{e.ScanCode:X} (Real Shift Down)");
+                    }
                 }
+            }
+            else
+            {
+                System.Diagnostics.Debug.Print($"[{keysInFakeShift}] " +
+                    $"{(e.KeyState == RawInputKeyStates.Down ? "Pressed" : "Released")} {e.Key}/0x{e.ScanCode:X} ");
             }
         }
 
