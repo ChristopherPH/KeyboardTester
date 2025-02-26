@@ -182,7 +182,7 @@ Holding both shift keys and pressing a key on the numeric keypad will:
             {
                 if (!PressedKeys.TryGetValue(lookupKey, out var lvi))
                 {
-                    txtLog.AppendText($"ERROR: Released {keyCode} without associated press" + Environment.NewLine);
+                    Log($"ERROR: Released {keyCode} without associated press");
                 }
                 else //remove key
                 {
@@ -243,7 +243,7 @@ Holding both shift keys and pressing a key on the numeric keypad will:
             if (txtRawLog.TextLength == 0)
                 txtRawLog.Text = message;
             else
-                txtRawLog.AppendText(message + Environment.NewLine);
+                txtRawLog.AppendText(Environment.NewLine + message);
 
             System.Diagnostics.Debug.Print(message);
         }
