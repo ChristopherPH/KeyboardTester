@@ -570,7 +570,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Keyboard Tester";
+            this.Text = "Keyboard Tester - https://github.com/ChristopherPH/KeyboardTester";
             this.gbNumLock.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
