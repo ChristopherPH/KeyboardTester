@@ -99,6 +99,7 @@
             this.lvPressedKeys.TabIndex = 1;
             this.lvPressedKeys.UseCompatibleStateImageBehavior = false;
             this.lvPressedKeys.View = System.Windows.Forms.View.Details;
+            this.lvPressedKeys.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvPressedKeys_MouseDoubleClick);
             // 
             // columnHeader1
             // 

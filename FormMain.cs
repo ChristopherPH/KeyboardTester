@@ -122,6 +122,15 @@ Holding both shift keys and pressing a key on the numeric keypad will:
                 ((keyData & Keys.KeyCode) == Keys.Menu);
         }
 
+        private void lvPressedKeys_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            PressedKeys.Clear();
+            lvPressedKeys.Items.Clear();
+
+            foreach (var label in LabelLookup.Values)
+                label.Text = "";
+        }
+
         private bool HandleKeyPress(Keys keyData, bool keyDown)
         {
             //System.Diagnostics.Debug.Print($"    {(keyDown ? "Pressed" : "Released")} {keyData}");
