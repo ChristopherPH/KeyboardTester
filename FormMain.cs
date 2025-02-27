@@ -34,9 +34,45 @@ namespace KeyboardTester
             InitKeyboardHandler();
 
             CheckNumLock();
+
+            LabelLookup = new Dictionary<Keys, Label>()
+            {
+                [Keys.NumLock] = lblKeyNumLock,
+
+                [Keys.ShiftKey] = lblKeyShift,
+                [Keys.ControlKey] = lblKeyCtrl,
+                [Keys.Menu] = lblKeyAlt,
+
+                [Keys.Insert] = lblKeyIns,
+                [Keys.Delete] = lblKeyDel,
+                [Keys.Home] = lblKeyHome,
+                [Keys.End] = lblKeyEnd,
+                [Keys.PageUp] = lblKeyPgUp,
+                [Keys.PageDown] = lblKeyPgDn,
+
+                [Keys.Left] = lblKeyLeft,
+                [Keys.Right] = lblKeyRight,
+                [Keys.Up] = lblKeyUp,
+                [Keys.Down] = lblKeyDown,
+
+                [Keys.NumPad0] = lblKeyNum0,
+                [Keys.NumPad1] = lblKeyNum1,
+                [Keys.NumPad2] = lblKeyNum2,
+                [Keys.NumPad3] = lblKeyNum3,
+                [Keys.NumPad4] = lblKeyNum4,
+                [Keys.NumPad5] = lblKeyNum5,
+                [Keys.NumPad6] = lblKeyNum6,
+                [Keys.NumPad7] = lblKeyNum7,
+                [Keys.NumPad8] = lblKeyNum8,
+                [Keys.NumPad9] = lblKeyNum9,
+
+                [Keys.Decimal] = lblKeyNumDecimal,
+            };
         }
 
         public Dictionary<Keys, ListViewItem> PressedKeys = new Dictionary<Keys, ListViewItem>();
+
+        public Dictionary<Keys, Label> LabelLookup;
 
         void CheckNumLock()
         {
@@ -155,6 +191,15 @@ Holding both shift keys and pressing a key on the numeric keypad will:
                     lvPressedKeys.Items.Add(lvi);
                     lvi.Selected = false;
                     lvi.Focused = false;
+
+                    if (LabelLookup.TryGetValue(lookupKey, out var label))
+                    {
+                        var txt = $"{lookupKey}";
+                        if (modifiers.HasFlag(Keys.Control)) txt += " [Ctrl]";
+                        if (modifiers.HasFlag(Keys.Alt)) txt += " [Alt]";
+                        if (modifiers.HasFlag(Keys.Shift)) txt += " [Shift]";
+                        label.Text = txt;
+                    }
                 }
                 else //update repeating key
                 {
@@ -176,6 +221,15 @@ Holding both shift keys and pressing a key on the numeric keypad will:
                     lvi.SubItems[1].Text = modifiers.HasFlag(Keys.Control) ? "Ctrl" : "";
                     lvi.SubItems[2].Text = modifiers.HasFlag(Keys.Alt) ? "Alt" : "";
                     lvi.SubItems[3].Text = modifiers.HasFlag(Keys.Shift) ? "Shift" : "";
+
+                    if (LabelLookup.TryGetValue(lookupKey, out var label))
+                    {
+                        var txt = $"{lookupKey}";
+                        if (modifiers.HasFlag(Keys.Control)) txt += " [Ctrl]";
+                        if (modifiers.HasFlag(Keys.Alt)) txt += " [Alt]";
+                        if (modifiers.HasFlag(Keys.Shift)) txt += " [Shift]";
+                        label.Text = txt;
+                    }
                 }
             }
             else //keyUp
@@ -194,6 +248,9 @@ Holding both shift keys and pressing a key on the numeric keypad will:
                         lvii.Tag = 0;
                         lvii.SubItems[4].Text = "";
                     }
+
+                    if (LabelLookup.TryGetValue(lookupKey, out var label))
+                        label.Text = "";
                 }
             }
 
