@@ -37,7 +37,7 @@ namespace KeyboardTester
 
             LabelLookup = new Dictionary<Keys, Label>()
             {
-                [Keys.NumLock] = lblKeyNumLock,
+                //[Keys.NumLock] = lblKeyNumLock,
 
                 [Keys.ShiftKey] = lblKeyShift,
                 [Keys.ControlKey] = lblKeyCtrl,
@@ -82,6 +82,7 @@ namespace KeyboardTester
             rbNumLockShifted.Enabled = numLock;
             rbNumLockIgnore.Enabled = numLock;
             chkIgnoreFakeShift.Enabled = numLock;
+            lblKeyNumLock.Text = $"NmLk {(numLock ? "ON" : "OFF")}";
 
             if (!numLock)
             {
