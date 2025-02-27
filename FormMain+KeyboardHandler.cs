@@ -245,6 +245,7 @@ namespace KeyboardTester
             {
                 switch (keyCode)
                 {
+                    case Keys.Delete: keyCode = Keys.Decimal; break;
                     case Keys.Insert: keyCode = Keys.NumPad0; break;
 
                     case Keys.End: keyCode = Keys.NumPad1; break;
